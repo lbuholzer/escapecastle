@@ -9,4 +9,4 @@ Import the project into pycharm where the code can be looked at and ran by doubl
 
 The other available files are either images used within the game or seperate functions made by team members integrated into the main structure.
 
-![](doc/EscapeCastle.mov)
+![Game Video](https://github.com/lbuholzer/escapecastle/edit/master/doc/EscapeCastle.mov)
