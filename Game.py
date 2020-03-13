@@ -7,6 +7,8 @@ from graphics import *
 from Drawings import *
 from Zombie import *
 
+logFileName = "game.log"
+
 invalidEntry = "Sorry. we didn't get that, please try again"
 invalidRoom = "Oops, you already visited this room, please try another one"
 
@@ -55,7 +57,11 @@ roomWestReason = "Ha ha, you really thought you were stronger than a soldier!"
 roomWestDrawing = drawSoldier
 
 
+logFile = open(logFileName, "a")
 
+def log(text):
+    print(text)
+    logFile.write(text + "\n")
 
 def clear(win):
     # As found on stackoverflow.com to eliminate repeating undraws
@@ -70,6 +76,7 @@ def drawCoins(win, coins):
 
 
 def showGameOver(win, reason):
+    log("Game over")
     gameOverText = Text(Point(500, 200), "GAME OVER")
     gameOverText.setSize(30)
     gameOverText.setStyle('bold')
@@ -180,6 +187,8 @@ def showMenu(win):
 
     while True:
 
+        log("## Game Started")
+
         win.setBackground("light blue")
         introText = Text(Point(500, 330), menuIntro)
         scoreText = Text(Point(887, 30), "Score: " + str(score))
@@ -220,11 +229,13 @@ def showMenu(win):
                 answer = answer.strip()
 
                 if answer in visitedRooms:
+                    log("Room " + answer + " already visited")
                     errorText.setText(invalidRoom)
                     errorText.draw(win)
                     continue
 
                 if answer == "north":
+                    log("Visiting room " + answer)
                     visitedRooms.append(answer)
                     clear(win)
                     result = showRoom(win, roomNorthDesc, roomNorthQuestion, roomNorthRA, roomNorthWA, roomNorthDrawing)
@@ -232,24 +243,28 @@ def showMenu(win):
 
 
                 elif answer == "south":
+                    log("Visiting room " + answer)
                     visitedRooms.append(answer)
                     clear(win)
                     result = showRoom(win, roomSouthDesc, roomSouthQuestion, roomSouthRA, roomSouthWA, roomSouthDrawing)
                     break
 
                 elif answer == "east":
+                    log("Visiting room " + answer)
                     visitedRooms.append(answer)
                     clear(win)
                     result = showRoom(win, roomEastDesc, roomEastQuestion, roomEastRA, roomEastWA, roomEastDrawing)
                     break
 
                 elif answer == "west":
+                    log("Visiting room " + answer)
                     visitedRooms.append(answer)
                     clear(win)
                     result = showRoom(win, roomWestDesc, roomWestQuestion, roomWestRA, roomWestWA, roomWestDrawing)
                     break
 
                 else:
+                    log("Invalid room " + answer)
                     errorText.setText(invalidEntry)
                     errorText.draw(win)
 
@@ -258,6 +273,8 @@ def showMenu(win):
             coins = coins + 1
             drawCoins(win, coins)
             score = score + 100
+            log("Coin added, current coins " + str(coins))
+            log("Current score " + str(score))
 
             # check if we win
             if (coins >= 4):
@@ -266,6 +283,7 @@ def showMenu(win):
                 result = showZombie(win)
                 clear(win)
                 if (result == True):
+                    log("Princess saved")
                     showPrincess(win)
                     coins = score = 0
                     visitedRooms = []
@@ -292,9 +310,13 @@ def showMenu(win):
 def main():
     win = GraphWin("Escape Castle", 1000, 500)
 
+    # log = open(logFileName, "a")
+    log("\n## New game session")
+
     showIntro(win)
     showMenu(win)
 
     win.close()
+    log.close()
 
 main()
